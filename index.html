@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>მაია კაციტაძე — კუტიური ატელიე</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&family=Noto+Serif+Georgian:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:#0a0907; --charcoal:#141210; --mid:#1e1b17;
+  --gold:#c9a84c; --gold-dim:#9a7a32; --gold-pale:#e8d5a0;
+  --cream:#f2ede4; --warm:#d6cfc2; --muted:#7a7268;
+  --light-bg:#f7f3ed;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --geo:'Noto Serif Georgian',serif;
+  --sans:'Jost',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--geo);background:var(--black);color:var(--cream);overflow-x:hidden;cursor:none}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+#cur,#cur2{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#cur{width:7px;height:7px;background:var(--gold);transition:transform .08s}
+#cur2{width:38px;height:38px;border:1px solid var(--gold);opacity:.5;transition:all .16s ease}
+body.hov #cur{transform:translate(-50%,-50%) scale(2.5);opacity:0}
+body.hov #cur2{transform:translate(-50%,-50%) scale(2);opacity:.15}
+
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:8888;mix-blend-mode:overlay}
+
+@keyframes rise{from{opacity:0;transform:translateY(42px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes sX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1.1)}}
+@keyframes needleDraw{to{stroke-dashoffset:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:30px 64px;transition:padding .4s,background .4s}
+nav.stuck{padding:16px 64px;background:rgba(10,9,7,.93);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.1)}
+.nav-brand{font-family:var(--geo);font-size:13px;font-weight:400;letter-spacing:5px;text-transform:uppercase;color:var(--gold)}
+.nav-links{display:flex;gap:44px;list-style:none}
+.nav-links a{font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:3px;text-transform:uppercase;color:var(--warm);opacity:.75;position:relative;transition:color .3s,opacity .3s}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.nav-links a:hover{opacity:1;color:var(--gold-pale)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:10px 22px;transition:all .3s}
+.nav-cta:hover{background:var(--gold-pale);transform:translateY(-1px);box-shadow:0 8px 30px rgba(201,168,76,.35)}
+
+.hero{min-height:100vh;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;align-items:end}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 78% 42%,rgba(201,168,76,.09) 0%,transparent 60%),radial-gradient(ellipse 30% 50% at 12% 88%,rgba(201,168,76,.05) 0%,transparent 55%),linear-gradient(160deg,#0a0907 0%,#161310 60%,#0a0907 100%)}
+.hero-thread{position:absolute;inset:0;pointer-events:none;width:100%;height:100%}
+.tl{fill:none;stroke:var(--gold);stroke-width:.6;opacity:.2;stroke-dasharray:2400;stroke-dashoffset:2400}
+.tl1{animation:needleDraw 5s ease forwards .6s}
+.tl2{animation:needleDraw 6.5s ease forwards 1.4s;opacity:.1}
+.hero-year{position:absolute;right:50%;top:50%;transform:translate(50%,-50%);font-family:var(--serif);font-size:220px;font-weight:300;color:rgba(201,168,76,.025);line-height:1;user-select:none;pointer-events:none;white-space:nowrap;letter-spacing:-10px}
+.hero-left{position:relative;z-index:2;padding:0 60px 110px 64px;align-self:end}
+.hero-eyebrow{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;gap:14px;opacity:0;animation:rise 1s ease forwards 1s}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--gold);opacity:.5}
+.hero-h1{font-family:var(--serif);font-size:clamp(60px,8.5vw,128px);font-weight:300;line-height:.9;letter-spacing:-2px;color:var(--cream);opacity:0;animation:rise 1.2s ease forwards 1.3s}
+.hero-h1 i{font-style:italic;color:var(--gold);display:block;padding-left:40px}
+.hero-rule{width:80px;height:1px;background:linear-gradient(to right,var(--gold),transparent);margin:36px 0;transform-origin:left;transform:scaleX(0);animation:sX 1s ease forwards 2s}
+.hero-sub{font-family:var(--geo);font-size:15px;font-weight:300;line-height:1.95;color:var(--muted);max-width:320px;opacity:0;animation:rise .9s ease forwards 2.2s}
+.hero-actions{display:flex;gap:18px;margin-top:48px;align-items:center;opacity:0;animation:rise .9s ease forwards 2.5s}
+.btn-g{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:3.5px;text-transform:uppercase;display:inline-flex;align-items:center;gap:12px;padding:16px 36px;background:var(--gold);color:var(--black);transition:all .3s}
+.btn-g:hover{background:var(--gold-pale);transform:translateY(-2px);box-shadow:0 20px 50px rgba(201,168,76,.3)}
+.btn-o{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:3.5px;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border:1px solid rgba(201,168,76,.35);color:var(--warm);transition:all .3s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.hero-right{position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 64px 80px 0}
+.hframe{width:100%;max-width:440px;aspect-ratio:3/4;position:relative}
+.hframe-in{width:100%;height:100%;background:linear-gradient(145deg,#1e1a14,#0e0c0a);position:relative;overflow:hidden}
+.hframe-in::before{content:'';position:absolute;inset:16px;border:1px solid rgba(201,168,76,.15);pointer-events:none;z-index:2}
+.hframe-pat{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,.4) 39px,rgba(201,168,76,.4) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,.4) 39px,rgba(201,168,76,.4) 40px)}
+.hframe-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:3}
+.hft-n{font-family:var(--serif);font-size:110px;font-weight:300;color:rgba(201,168,76,.07);line-height:1;user-select:none}
+.hft-l{font-family:var(--sans);font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);opacity:.5}
+.hframe::before,.hframe::after{content:'';position:absolute;width:50px;height:50px;border:1px solid rgba(201,168,76,.3)}
+.hframe::before{top:-12px;right:-12px;border-bottom:none;border-left:none}
+.hframe::after{bottom:-12px;left:-12px;border-top:none;border-right:none}
+.scroll-cue{position:absolute;bottom:40px;left:64px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;opacity:0;animation:rise .8s ease forwards 3s}
+.scroll-cue span{font-family:var(--sans);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--muted)}
+.sc-line{width:1px;height:52px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2.2s ease-in-out infinite}
+
+.ticker{background:var(--gold);overflow:hidden;padding:13px 0;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:ticker 22s linear infinite}
+.ti{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:4px;text-transform:uppercase;color:var(--black);padding:0 36px}
+.td{color:rgba(10,9,7,.3);padding:0 4px}
+
+.sec-lbl{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.sec-lbl::before{content:'';width:28px;height:1px;background:var(--gold);opacity:.6}
+.sec-h2{font-family:var(--serif);font-size:clamp(36px,4.5vw,64px);font-weight:300;line-height:1.05;letter-spacing:-.5px;color:var(--cream)}
+.sec-h2 i{font-style:italic;color:var(--gold)}
+.sec-h2.dk{color:var(--charcoal)}
+.sec-h2.dk i{color:var(--gold-dim)}
+.gl{width:48px;height:1px;background:var(--gold);opacity:.5;margin:28px 0}
+
+.r{opacity:0;transform:translateY(36px);transition:opacity .85s ease,transform .85s ease}
+.r.on{opacity:1;transform:none}
+.r.d1{transition-delay:.1s}.r.d2{transition-delay:.2s}.r.d3{transition-delay:.3s}.r.d4{transition-delay:.4s}.r.d5{transition-delay:.5s}
+
+.about{background:var(--light-bg);color:var(--charcoal);display:grid;grid-template-columns:1fr 1fr;min-height:90vh}
+.about-l{padding:120px 80px;display:flex;flex-direction:column;justify-content:center}
+.about-body{font-family:var(--geo);font-size:16px;font-weight:300;line-height:2;color:#4a4540;margin-bottom:24px}
+.about-q{font-family:var(--serif);font-size:clamp(22px,2.5vw,30px);font-style:italic;font-weight:300;color:var(--gold-dim);border-left:2px solid var(--gold-dim);padding-left:24px;margin:40px 0;line-height:1.6}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px;border-top:1px solid rgba(201,168,76,.2)}
+.st{padding:32px 24px 32px 0;border-right:1px solid rgba(201,168,76,.12)}
+.st:last-child{border-right:none;padding-right:0}
+.st-n{font-family:var(--serif);font-size:52px;font-weight:300;color:var(--gold-dim);line-height:1;margin-bottom:6px}
+.st-l{font-family:var(--geo);font-size:12px;font-weight:300;color:var(--muted);line-height:1.65}
+.about-r{position:relative;overflow:hidden;background:linear-gradient(145deg,#1a1712,#0e0c0a)}
+.arp{position:absolute;inset:0;opacity:.035;background:repeating-conic-gradient(rgba(201,168,76,1) 0% 25%,transparent 0% 50%) 0 0/40px 40px}
+.arc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+.arc-spin{position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(201,168,76,.05);top:50%;left:50%;transform:translate(-50%,-50%);animation:spin 60s linear infinite}
+.arc-spin::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.3}
+.arc-frame{width:280px;height:360px;border:1px solid rgba(201,168,76,.2);position:relative;display:flex;align-items:center;justify-content:center}
+.arc-frame::before{content:'';position:absolute;inset:12px;border:1px solid rgba(201,168,76,.07)}
+.arc-in{font-family:var(--serif);font-size:100px;font-weight:300;color:rgba(201,168,76,.06);line-height:1}
+.arc-tag{font-family:var(--sans);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);opacity:.5}
+
+.services{background:var(--charcoal);padding:130px 80px}
+.svc-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:80px}
+.svc-big{font-family:var(--serif);font-size:120px;font-weight:300;color:rgba(201,168,76,.04);line-height:1}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,.07)}
+.svc{background:var(--charcoal);padding:52px 44px;position:relative;overflow:hidden;transition:background .4s}
+.svc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--gold),var(--gold-pale),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
+.svc:hover{background:#1a1814}
+.svc:hover::after{transform:scaleX(1)}
+.svc-num{font-family:var(--serif);font-size:12px;letter-spacing:4px;color:var(--gold);opacity:.5;margin-bottom:36px}
+.svc-icon{margin-bottom:20px}
+.svc-name{font-family:var(--geo);font-size:20px;font-weight:400;color:var(--cream);margin-bottom:14px;line-height:1.4}
+.svc-rule{width:28px;height:1px;background:var(--gold);opacity:.4;margin:18px 0}
+.svc-desc{font-family:var(--geo);font-size:14px;font-weight:300;color:var(--muted);line-height:1.9}
+
+.process{background:var(--light-bg);padding:130px 80px}
+.ps-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:80px;position:relative}
+.ps-wrap::before{content:'';position:absolute;top:36px;left:10%;right:10%;height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.25),transparent)}
+.ps{padding:0 40px;text-align:center}
+.ps-num{width:72px;height:72px;border-radius:50%;border:1px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 32px;font-family:var(--serif);font-size:24px;font-weight:300;color:var(--gold-dim);background:var(--light-bg);position:relative;z-index:1;transition:all .3s}
+.ps:hover .ps-num{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.ps-title{font-family:var(--geo);font-size:17px;font-weight:500;color:var(--charcoal);margin-bottom:14px;line-height:1.4}
+.ps-desc{font-family:var(--geo);font-size:13px;font-weight:300;color:var(--muted);line-height:1.95}
+
+.portfolio{background:var(--black);padding:130px 80px}
+.port-hd{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px}
+.port-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:320px 320px;gap:3px}
+.pg{position:relative;overflow:hidden;background:linear-gradient(145deg,#1a1612,#0e0c09);cursor:pointer}
+.pg:first-child{grid-row:span 2}
+.pg-in{width:100%;height:100%;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.pg:hover .pg-in{transform:scale(1.06)}
+.pg-icon{opacity:.15}
+.pg-lbl{font-family:var(--sans);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);opacity:.4}
+.pg::before{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(10,9,7,.7),transparent 50%);opacity:0;transition:opacity .4s}
+.pg:hover::before{opacity:1}
+.pg-cap{position:absolute;bottom:24px;left:24px;z-index:3;font-family:var(--geo);font-size:13px;font-weight:300;color:var(--cream);opacity:0;transform:translateY(8px);transition:all .4s}
+.pg:hover .pg-cap{opacity:1;transform:translateY(0)}
+.pg::after{content:'';position:absolute;inset:0;z-index:2;border:1px solid rgba(201,168,76,0);transition:border-color .4s}
+.pg:hover::after{border-color:rgba(201,168,76,.2)}
+.port-ig{text-align:center;margin-top:56px;font-family:var(--serif);font-size:20px;font-style:italic;font-weight:300;color:var(--muted)}
+.port-ig a{background:linear-gradient(to right,var(--gold),var(--gold-pale));-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:opacity .3s}
+.port-ig a:hover{opacity:.8}
+
+.testi{background:var(--mid);padding:130px 80px;overflow:hidden}
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px}
+.tc{background:#161310;padding:52px 44px;position:relative;overflow:hidden;transition:background .3s}
+.tc:hover{background:#1c1916}
+.tc::before{content:'\201C';position:absolute;top:20px;right:28px;font-family:var(--serif);font-size:100px;font-weight:300;color:rgba(201,168,76,.06);line-height:1}
+.tc-stars{color:var(--gold);font-size:11px;letter-spacing:4px;margin-bottom:24px}
+.tc-text{font-family:var(--geo);font-size:15px;font-weight:300;font-style:italic;line-height:1.95;color:var(--warm);margin-bottom:32px}
+.tc-name{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.tc-city{font-family:var(--geo);font-size:12px;color:var(--muted);margin-top:4px}
+
+.contact{background:var(--black);display:grid;grid-template-columns:1fr 1fr;min-height:90vh}
+.con-l{padding:130px 80px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(201,168,76,.08)}
+.con-tag{font-family:var(--serif);font-size:clamp(42px,5.5vw,80px);font-weight:300;line-height:.95;letter-spacing:-.5px;color:var(--cream);margin-bottom:36px}
+.con-tag i{font-style:italic;color:var(--gold);display:block;padding-left:32px}
+.con-body{font-family:var(--geo);font-size:15px;font-weight:300;line-height:1.95;color:var(--muted);max-width:360px;margin-bottom:52px}
+.con-info{display:flex;flex-direction:column;gap:32px}
+.ci-l{font-family:var(--sans);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.ci-v{font-family:var(--geo);font-size:15px;font-weight:300;color:var(--cream);line-height:1.6}
+.ci-v a{color:var(--cream);transition:color .3s}
+.ci-v a:hover{color:var(--gold)}
+.con-r{padding:130px 80px;display:flex;flex-direction:column;justify-content:center}
+.c-form{display:flex;flex-direction:column;gap:28px}
+.fg label{display:block;font-family:var(--sans);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.fg input,.fg select,.fg textarea{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(201,168,76,.18);color:var(--cream);font-family:var(--geo);font-size:15px;font-weight:300;padding:12px 0;outline:none;caret-color:var(--gold);transition:border-color .3s;appearance:none;-webkit-appearance:none}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(201,168,76,.2);font-size:14px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-bottom-color:var(--gold)}
+.fg textarea{resize:none;height:90px}
+.fg select{cursor:pointer}
+.fg select option{background:var(--charcoal)}
+.f-sub{font-family:var(--sans);font-size:9px;font-weight:300;letter-spacing:3.5px;text-transform:uppercase;color:var(--black);background:var(--gold);border:none;padding:18px 44px;cursor:pointer;align-self:flex-start;display:inline-flex;align-items:center;gap:14px;transition:all .3s;margin-top:12px}
+.f-sub:hover{background:var(--gold-pale);transform:translateY(-2px);box-shadow:0 16px 48px rgba(201,168,76,.3)}
+.f-sub svg{transition:transform .3s}
+.f-sub:hover svg{transform:translateX(6px)}
+#fok{display:none;font-family:var(--geo);font-size:14px;font-weight:300;color:var(--gold);padding:18px 0;letter-spacing:1px}
+
+footer{background:#060504;padding:48px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;border-top:1px solid rgba(201,168,76,.08)}
+.f-brand{font-family:var(--geo);font-size:14px;font-weight:300;color:var(--gold);letter-spacing:2px}
+.f-copy{font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(122,114,104,.45)}
+.f-lnks{display:flex;gap:32px}
+.f-lnks a{font-family:var(--sans);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.f-lnks a:hover{color:var(--gold)}
+
+@media(max-width:1100px){
+  nav{padding:20px 32px}nav.stuck{padding:14px 32px}
+  .hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:140px 32px 100px}
+  .about,.contact{grid-template-columns:1fr}
+  .about-r{min-height:400px}.con-r{padding:60px 32px}
+  .about-l,.con-l{padding:80px 32px}
+  .services,.portfolio,.testi,.process{padding:80px 32px}
+  .svc-grid,.t-grid{grid-template-columns:1fr}
+  .port-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .pg:first-child{grid-row:span 1;grid-column:span 2}
+  .ps-wrap{grid-template-columns:1fr 1fr;gap:40px}.ps-wrap::before{display:none}
+  .svc-top{flex-direction:column;align-items:flex-start;gap:20px}
+  footer{padding:32px}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .about-stats{grid-template-columns:1fr 1fr}
+  .port-grid{grid-template-columns:1fr}.pg:first-child{grid-column:span 1}
+  .ps-wrap{grid-template-columns:1fr}
+  .port-hd{flex-direction:column;align-items:flex-start;gap:20px}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-brand">მ · კაციტაძე</a>
+  <ul class="nav-links">
+    <li><a href="#about">შესახებ</a></li>
+    <li><a href="#services">სერვისები</a></li>
+    <li><a href="#process">პროცესი</a></li>
+    <li><a href="#portfolio">კოლექცია</a></li>
+    <li><a href="#contact">კონტაქტი</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">ჯავშნა</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <svg class="hero-thread" viewBox="0 0 1440 900" preserveAspectRatio="none">
+    <path class="tl tl1" d="M-10 720 C120 580 280 350 480 300 S680 160 820 260 S960 440 1100 360 S1280 140 1450 180"/>
+    <path class="tl tl2" d="M1450 700 C1280 620 1080 480 880 520 S680 640 480 560 S280 400 80 440 S-40 520-10 560"/>
+    <circle r="3" fill="#c9a84c" opacity="0">
+      <animate attributeName="opacity" from="0" to="0.6" dur=".3s" fill="freeze" begin="5.4s"/>
+      <animateMotion dur="5s" fill="freeze" begin=".6s" path="M-10 720 C120 580 280 350 480 300 S680 160 820 260 S960 440 1100 360 S1280 140 1450 180"/>
+    </circle>
+  </svg>
+  <div class="hero-year">2024</div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">კუტიური ატელიე · თბილისი</div>
+    <h1 class="hero-h1">მაია<i>კაციტაძე</i></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">ქართული ხელოვნება ქსოვილში —<br>ინდივიდუალური, უნიკალური,<br>სრულყოფილი.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-g">შეხვედრა დაჯავშნა <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#portfolio" class="btn-o">კოლექცია →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hframe">
+      <div class="hframe-in">
+        <div class="hframe-pat"></div>
+        <div class="hframe-txt"><div class="hft-n">მ·კ</div><div class="hft-l">კუტიური ატელიე</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>გადახვევა</span><div class="sc-line"></div></div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti">კუტიური</span><span class="td">◆</span><span class="ti">ხელნაკეთი</span><span class="td">◆</span><span class="ti">ექსკლუზიური</span><span class="td">◆</span><span class="ti">ქართული ხელოვნება</span><span class="td">◆</span><span class="ti">ინდივიდუალური სტილი</span><span class="td">◆</span><span class="ti">სიზუსტე</span><span class="td">◆</span><span class="ti">სილამაზე</span><span class="td">◆</span><span class="ti">პრემიუმ ხარისხი</span><span class="td">◆</span>
+    <span class="ti">კუტიური</span><span class="td">◆</span><span class="ti">ხელნაკეთი</span><span class="td">◆</span><span class="ti">ექსკლუზიური</span><span class="td">◆</span><span class="ti">ქართული ხელოვნება</span><span class="td">◆</span><span class="ti">ინდივიდუალური სტილი</span><span class="td">◆</span><span class="ti">სიზუსტე</span><span class="td">◆</span><span class="ti">სილამაზე</span><span class="td">◆</span><span class="ti">პრემიუმ ხარისხი</span><span class="td">◆</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-l">
+    <p class="sec-lbl r">შესახებ</p>
+    <h2 class="sec-h2 dk r d1">ქსოვილი<br>ხდება <i>ხელოვნება</i></h2>
+    <div class="gl r d2"></div>
+    <blockquote class="about-q r d2">"ყოველი ნაკერი — ეს ამბავია.<br>ყოველი კაბა — ინდივიდუალური შედევრი."</blockquote>
+    <p class="about-body r d3">მაია კაციტაძე — თბილისელი კუტიური მკერავი, რომლის ხელოვნება ატარებს ქართული ტრადიციის სიღრმეს და თანამედროვე სიმარჯვეს. წლების გამოცდილება, განუყოფელი ყურადღება დეტალებისადმი და სიყვარული პროფესიისადმი ქმნის სამოსს, რომელიც ზუსტად გამოხატავს მის მატარებელს.</p>
+    <p class="about-body r d3">თითოეული კლიენტი — ახალი ისტორია. თითოეული ქსოვილი — ახალი შესაძლებლობა. ეს არ არის უბრალო კერვა — ეს ხელოვნებაა.</p>
+    <div class="about-stats r d4">
+      <div class="st"><div class="st-n">10+</div><div class="st-l">წლიანი<br>გამოცდილება</div></div>
+      <div class="st"><div class="st-n">500+</div><div class="st-l">ბედნიერი<br>კლიენტი</div></div>
+      <div class="st"><div class="st-n">∞</div><div class="st-l">ქართული<br>ხარისხი</div></div>
+    </div>
+  </div>
+  <div class="about-r">
+    <div class="arp"></div>
+    <div class="arc-spin"></div>
+    <div class="arc">
+      <div class="arc-frame"><div class="arc-in">მ</div></div>
+      <div class="arc-tag">კუტიური ატელიე · თბილისი</div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="svc-top">
+    <div>
+      <p class="sec-lbl r">სერვისები</p>
+      <h2 class="sec-h2 r d1">ჩვენი <i>შეთავაზება</i></h2>
+    </div>
+    <div class="svc-big r">06</div>
+  </div>
+  <div class="svc-grid">
+    <div class="svc r">
+      <div class="svc-num">— 01</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4C9.373 4 4 9.373 4 16S9.373 28 16 28 28 22.627 28 16 22.627 4 16 4z" stroke="#c9a84c" stroke-width=".7"/><path d="M16 10V16L20 20" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/><circle cx="16" cy="16" r="1.5" fill="#c9a84c" opacity=".6"/></svg></div>
+      <h3 class="svc-name">ქორწილის კაბა</h3><div class="svc-rule"></div>
+      <p class="svc-desc">თქვენი სიზმრის კაბა — ინდივიდუალურად შექმნილი, ზუსტი გაზომვებით, პრემიუმ ქსოვილებით. ყოველი დეტალი სრულყოფილია.</p>
+    </div>
+    <div class="svc r d1">
+      <div class="svc-num">— 02</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="5" y="7" width="22" height="18" rx="1.5" stroke="#c9a84c" stroke-width=".7"/><path d="M11 7V5M21 7V5" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/><path d="M9 15H23M9 20H17" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/></svg></div>
+      <h3 class="svc-name">საღამოს სამოსი</h3><div class="svc-rule"></div>
+      <p class="svc-desc">განსაკუთრებული ღონისძიებებისთვის შექმნილი ექსკლუზიური ტანსაცმელი, რომელიც ხაზს უსვამს თქვენს ინდივიდუალობას.</p>
+    </div>
+    <div class="svc r d2">
+      <div class="svc-num">— 03</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M7 26L16 6L25 26" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 20H22" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/></svg></div>
+      <h3 class="svc-name">ყოველდღიური სტილი</h3><div class="svc-rule"></div>
+      <p class="svc-desc">ელეგანტური ყოველდღიური სამოსი — კომფორტი და სტილი ერთად. ქსოვილები, ჭრა და ნაკერები საუკეთესო ხარისხის.</p>
+    </div>
+    <div class="svc r d1">
+      <div class="svc-num">— 04</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 8L24 24M24 8L8 24" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round" opacity=".4"/><circle cx="16" cy="16" r="7" stroke="#c9a84c" stroke-width=".7"/><circle cx="16" cy="16" r="2" fill="#c9a84c" opacity=".4"/></svg></div>
+      <h3 class="svc-name">ინდივიდუალური დიზაინი</h3><div class="svc-rule"></div>
+      <p class="svc-desc">თქვენი ხედვა, ჩვენი ოსტატობა. სკიცებიდან დამზადებამდე — სრული კუტიური სერვისი თქვენი სურვილების მიხედვით.</p>
+    </div>
+    <div class="svc r d2">
+      <div class="svc-num">— 05</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 16H26M16 6V26" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/><path d="M10 10L22 22M22 10L10 22" stroke="#c9a84c" stroke-width=".35" stroke-linecap="round" opacity=".3"/></svg></div>
+      <h3 class="svc-name">ტანსაცმლის შეკეთება</h3><div class="svc-rule"></div>
+      <p class="svc-desc">ნებისმიერი სამოსის ადაპტაცია, შეკეთება და განახლება. ძველ ტანსაცმელს ახალ სიცოცხლეს ვაძლევთ.</p>
+    </div>
+    <div class="svc r d3">
+      <div class="svc-num">— 06</div>
+      <div class="svc-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M7 9H25M7 16H21M7 23H17" stroke="#c9a84c" stroke-width=".7" stroke-linecap="round"/></svg></div>
+      <h3 class="svc-name">კოლექციური ნიმუშები</h3><div class="svc-rule"></div>
+      <p class="svc-desc">შეზღუდული რაოდენობის ექსკლუზიური ნიმუშები — ნამდვილი კოლექციონირებადი ნივთები პრემიუმ მასალებით.</p>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <p class="sec-lbl r" style="color:var(--gold)">მუშაობის პროცესი</p>
+  <h2 class="sec-h2 dk r d1">როგორ <i>ვქმნით</i></h2>
+  <div class="ps-wrap">
+    <div class="ps r"><div class="ps-num">I</div><h3 class="ps-title">კონსულტაცია</h3><p class="ps-desc">პირველი შეხვედრა — ვისაუბრებთ თქვენს სტილზე, ფერებსა და სურვილებზე. ინდივიდუალური მიდგომა ყველასთვის.</p></div>
+    <div class="ps r d1"><div class="ps-num">II</div><h3 class="ps-title">გაზომვა და ესკიზი</h3><p class="ps-desc">ზუსტი გაზომვები და ორიგინალი ესკიზი. ქსოვილის ერთობლივი შერჩევა თქვენი ხედვის მიხედვით.</p></div>
+    <div class="ps r d2"><div class="ps-num">III</div><h3 class="ps-title">შექმნის პროცესი</h3><p class="ps-desc">ხელნაკეთი სამოსი — ყოველი ნაკერი სიზუსტით. შუალედური მოსინჯვა სრულყოფილი შედეგისთვის.</p></div>
+    <div class="ps r d3"><div class="ps-num">IV</div><h3 class="ps-title">ფინალური მიწოდება</h3><p class="ps-desc">საბოლოო მოსინჯვა და კორექტირება. სამოსი მზადაა — ჩაიცვით და გრძნობდეთ სილამაზეს.</p></div>
+  </div>
+</section>
+
+<section class="portfolio" id="portfolio">
+  <div class="port-hd">
+    <div>
+      <p class="sec-lbl r">კოლექცია</p>
+      <h2 class="sec-h2 r d1">ნამუშევრები <i>და სტილი</i></h2>
+    </div>
+    <a href="https://www.instagram.com/maia.kacitadze/" target="_blank" class="btn-o r d2">Instagram-ზე ნახვა →</a>
+  </div>
+  <div class="port-grid">
+    <div class="pg r"><div class="pg-in" style="background:linear-gradient(145deg,#2a2218,#141008)"><div class="pg-icon"><svg width="56" height="56" viewBox="0 0 56 56" fill="none"><path d="M28 8L48 20V36L28 48L8 36V20L28 8Z" stroke="#c9a84c" stroke-width=".6"/><circle cx="28" cy="28" r="10" stroke="#c9a84c" stroke-width=".6"/></svg></div><div class="pg-lbl">ქორწილის კოლექცია</div></div><span class="pg-cap">საქორწილო კოლექცია 2024</span></div>
+    <div class="pg r d1"><div class="pg-in" style="background:linear-gradient(145deg,#1e1c14,#0e0c0a)"><div class="pg-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="4" y="4" width="28" height="28" rx="2" stroke="#c9a84c" stroke-width=".6"/><circle cx="18" cy="18" r="8" stroke="#c9a84c" stroke-width=".6"/></svg></div><div class="pg-lbl">საღამოს სამოსი</div></div><span class="pg-cap">გალა კოლექცია</span></div>
+    <div class="pg r d2"><div class="pg-in" style="background:linear-gradient(145deg,#201e14,#100f0a)"><div class="pg-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M10 30V10L18 6L26 10V30" stroke="#c9a84c" stroke-width=".6" stroke-linecap="round"/><path d="M14 30V20H22V30" stroke="#c9a84c" stroke-width=".6"/></svg></div><div class="pg-lbl">კლასიკური ხაზი</div></div><span class="pg-cap">კლასიკური სტილი</span></div>
+    <div class="pg r d1"><div class="pg-in" style="background:linear-gradient(145deg,#1c1a10,#0a0906)"><div class="pg-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M6 18C6 11.373 11.373 6 18 6S30 11.373 30 18 24.627 30 18 30" stroke="#c9a84c" stroke-width=".6" stroke-linecap="round"/><path d="M18 12V18L22 22" stroke="#c9a84c" stroke-width=".6" stroke-linecap="round"/></svg></div><div class="pg-lbl">ყოველდღიური ელეგანტობა</div></div><span class="pg-cap">სეზონური კოლექცია</span></div>
+    <div class="pg r d2"><div class="pg-in" style="background:linear-gradient(145deg,#221e14,#0c0a08)"><div class="pg-icon"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 28L18 8L28 28" stroke="#c9a84c" stroke-width=".6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22H24" stroke="#c9a84c" stroke-width=".6" stroke-linecap="round"/></svg></div><div class="pg-lbl">ექსკლუზიური ნიმუშები</div></div><span class="pg-cap">ლიმიტირებული გამოცემა</span></div>
+  </div>
+  <p class="port-ig r" style="margin-top:60px">სრული კოლექციის სანახავად ეწვიეთ <a href="https://www.instagram.com/maia.kacitadze/" target="_blank" rel="noopener">@maia.kacitadze</a> Instagram-ზე</p>
+</section>
+
+<section class="testi" id="testimonials">
+  <p class="sec-lbl r">კლიენტების შეფასება</p>
+  <h2 class="sec-h2 r d1">ისინი ენდობიან <i>ჩვენს ხელებს</i></h2>
+  <div class="t-grid">
+    <div class="tc r"><div class="tc-stars">★ ★ ★ ★ ★</div><p class="tc-text">„მაიამ შექმნა ჩემი ქორწილის კაბა, რომელსაც ვოცნებობდი მთელი ცხოვრება. ყოველი დეტალი სრულყოფილი იყო — ჭრა, ქსოვილი, ნაკერები. ეს იყო ყველაზე ლამაზი დღე ჩემი ცხოვრებაში."</p><div class="tc-name">ნინო ბ.</div><div class="tc-city">თბილისი · 2024</div></div>
+    <div class="tc r d1"><div class="tc-stars">★ ★ ★ ★ ★</div><p class="tc-text">„საოცარი ოსტატი! საღამოს კაბა, რომელიც მაიამ შემიკერა, ყველა ყურადღება მიიპყრო. პროფესიონალიზმი, სიზუსტე და გული — ეს არის მაიას სტილი."</p><div class="tc-name">მარიამ კ.</div><div class="tc-city">ბათუმი · 2024</div></div>
+    <div class="tc r d2"><div class="tc-stars">★ ★ ★ ★ ★</div><p class="tc-text">„ათი წელია ვიცვამ მაიას ნამუშევრებს. თითოეული კაბა უნიკალურია, ხარისხი — უმაღლესი. ეს არ არის უბრალო მკერავი — ეს ოსტატია."</p><div class="tc-name">თამარ ლ.</div><div class="tc-city">თბილისი · 2023</div></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="con-l">
+    <p class="sec-lbl r">კონტაქტი</p>
+    <h2 class="con-tag r d1">მოდი<br>შევქმნათ<i>ერთად</i></h2>
+    <p class="con-body r d2">დაგვიკავშირდით კონსულტაციისთვის. სიამოვნებით შევხვდებით და ვისაუბრებთ თქვენს ხედვაზე — ყოველი ჯავშანი ინდივიდუალური და განსაკუთრებულია.</p>
+    <div class="con-info">
+      <div class="r d2"><div class="ci-l">Instagram</div><div class="ci-v"><a href="https://www.instagram.com/maia.kacitadze/" target="_blank">@maia.kacitadze</a></div></div>
+      <div class="r d3"><div class="ci-l">მდებარეობა</div><div class="ci-v">თბილისი, საქართველო</div></div>
+      <div class="r d4"><div class="ci-l">სამუშაო საათები</div><div class="ci-v">ორშ — შაბ · 10:00 — 19:00</div></div>
+      <div class="r d5"><div class="ci-l">ვიზიტი</div><div class="ci-v">მხოლოდ წინასწარი ჯავშნით</div></div>
+    </div>
+  </div>
+  <div class="con-r">
+    <p class="sec-lbl r" style="margin-bottom:36px">შეტყობინება</p>
+    <form class="c-form" id="cform" onsubmit="doForm(event)">
+      <div class="fg r d1"><label>სახელი</label><input type="text" placeholder="თქვენი სახელი" required/></div>
+      <div class="fg r d1"><label>ტელეფონი ან E-mail</label><input type="text" placeholder="+995 5XX XXX XXX" required/></div>
+      <div class="fg r d2"><label>სერვისი</label><select><option value="">— აირჩიეთ სერვისი —</option><option>ქორწილის კაბა</option><option>საღამოს სამოსი</option><option>ყოველდღიური სტილი</option><option>ინდივიდუალური დიზაინი</option><option>ტანსაცმლის შეკეთება</option><option>კოლექციური ნიმუში</option></select></div>
+      <div class="fg r d3"><label>შეტყობინება</label><textarea placeholder="მოგვიყევით თქვენი სურვილის შესახებ..." required></textarea></div>
+      <button type="submit" class="f-sub r d3" id="fsub">გაგზავნა <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div id="fok">✦ მადლობა! თქვენი შეტყობინება მიღებულია. გიპასუხებთ მალე.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="f-brand">მაია კაციტაძე — კუტიური ატელიე</div>
+  <div class="f-copy">© 2024 · ყველა უფლება დაცულია</div>
+  <div class="f-lnks">
+    <a href="https://www.instagram.com/maia.kacitadze/" target="_blank">Instagram</a>
+    <a href="#about">შესახებ</a>
+    <a href="#contact">კონტაქტი</a>
+  </div>
+</footer>
+
+<script>
+const c1=document.getElementById('cur'),c2=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c1.style.left=mx+'px';c1.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;c2.style.left=rx+'px';c2.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.svc,.pg,.tc,.ps').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('stuck',window.scrollY>60));
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}}));
+function doForm(e){e.preventDefault();const b=document.getElementById('fsub');b.style.opacity='.4';b.disabled=true;setTimeout(()=>{b.style.display='none';document.getElementById('fok').style.display='block';},700);}
+const hl=document.querySelector('.hero-left'),hy=document.querySelector('.hero-year');
+window.addEventListener('scroll',()=>{const s=window.scrollY;if(s<window.innerHeight&&hl){hl.style.transform=`translateY(${s*.28}px)`;hl.style.opacity=String(1-(s/700));}if(hy)hy.style.transform=`translate(50%,calc(-50% + ${s*.12}px))`;},{passive:true});
+</script>
+</body>
+</html>
